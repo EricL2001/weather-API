@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather API</title>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="weather-block">
+    <div class="city-state-shell">
+      <div class="city" id="city_state"></div>
+    </div> 
+    <div class="cond-temp">
+      <div class="temp" id="temp"></div>
+      <button id="change">F / C</button>
+      <div class="condition" id="condition"></div>
+      <div id="icon" class="icon"></div>
+    </div>
+  </div>
+</div>
+
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<script>
+
+$(document).ready(function(){
+  var url = 'https://api.wunderground.com/api/c3e748524ff9c486/conditions/forecast/geolookup/q/autoip.json';
+    $.getJSON(url, function(data){
+      var city = data.current_observation.display_location.city
+      var state = data.current_observation.display_location.state
+      var temp_f = Math.floor(data.current_observation.temp_f)
+      var temp_c = Math.floor(data.current_observation.temp_c)
+      var condition = data.current_observation.weather
+      var icon = data.current_observation.icon_url
+      
+      $("#city_state").html(city + ", " + state);
+      $("#temp").html(temp_f + "&deg" + "F");
+      $("#condition").html("Current condition: " + condition);
+      $("#icon").append('<img src='+icon+' alt="weather">');
+      
+        var toggle = false;
+        $('#change').click(function(){
+          if(toggle === false) {
+            $('.temp').html(temp_c + "&deg" + "C");
+            toggle = true;
+          } else {
+            $('.temp').html(temp_f + "&deg" + "F");
+            toggle = false;
+          }
+       });
+    });
+});
+
+
+
+  
+</script> 
+
+
+</body>
+</html>
